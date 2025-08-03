@@ -73,6 +73,48 @@ export const deleteUser = async (req, res)=>{
   }
 }
 
+export const UpdateProfile = async(req, res)=>{
+  try {
+    const userId = req.user.id;
+
+    const {
+      FullName,
+      ProfileImage,
+      bio,
+      location,
+      resume,
+      profile 
+    } = req.body;
+
+    const updatedFields = {
+      ...(FullName && { FullName }),
+      ...(ProfileImage && { ProfileImage }),
+      ...(bio && { bio }),
+      ...(location && { location }),
+      ...(resume && { resume }),
+      ...(profile && {
+        profile: {
+          ...(profile.skills && { skills: profile.skills }),
+          ...(profile.experience && { experience: profile.experience }),
+          ...(profile.education && { education: profile.education }),
+        },
+      }),
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updatedFields },
+      { new: true }
+    );
+
+    res.status(200).json({ success: true, updatedUser });
+  } catch (error) {
+    console.error("Profile update failed:", error);
+    res.status(500).json({ success: false, message: "Profile update failed" });
+  }
+};
+
+
 export const UserProfile = async(req, res)=>{
   const userId = req.user.id
   try {

@@ -8,4 +8,5 @@ userRouter.post('/login',userController.login);
 userRouter.delete('/deleteUser/:ID',userController.deleteUser);
 //authenticated Routes
 userRouter.get('/profile', authmiddlewareVerification, userController.UserProfile)
+userRouter.patch('/updateprofile', authmiddlewareVerification, userController.UpdateProfile)
 module.exports = userRouter;
