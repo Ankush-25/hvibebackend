@@ -65,11 +65,24 @@ export const deleteUser = async (req, res)=>{
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: "User deleted successfully" });
+    return res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     console.error("Error while deleting the user", error);
     res.status(500).json("Internal Server Error")
     
   }
-  
+}
+
+export const UserProfile = async(req, res)=>{
+  const userId = req.user.id
+  try {
+    const user = await User.findById(userId).select("-password");
+    if(!user){
+      return req.status(400).json({message: "User Not Found "})
+    }
+    return res.status(200).json( {response: user})
+  } catch (error) {
+    console.error("There is Some Error in fetching UserProfile ")
+    res.status(500).json({message:" Internal Server Error! "})
+  }
 }
