@@ -27,6 +27,9 @@ const ProfileSchema = new mongoose.Schema({
     type: String,
     enum: ["job_seeker", "employer", "admin"],
   },
+  Role:{
+    type:String,
+  },
   profile: {
     skills: [String],
     experience: [
