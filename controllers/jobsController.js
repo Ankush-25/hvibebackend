@@ -1,8 +1,9 @@
 import Job from "../model/jobModel.js";
+import { EJSON } from 'bson';
 
 export const PostJob = async (req, res) => {
   const user = req.user.ID;
-};import { EJSON } from 'bson';
+};
 
 export const TPostJob = async (req, res) => {
   try {
