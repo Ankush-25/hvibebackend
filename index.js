@@ -19,6 +19,7 @@ async function dbconnection(MONGO_DB_URI){
 }
 
 async function startServer() {
+  const basepath = process.env.NDE_ENV === 'production' ? '/api' : '/';
   const PORT = process.env.PORT;
   const MONGO_DB_URI = process.env.MONGO_URL;
 
@@ -36,7 +37,7 @@ async function startServer() {
     methods: ['GET','POST','PUT','DELETE','PATCH']
   }));
     
-  app.use("/",mainRouter);
+  app.use(basepath,mainRouter);
 
   const httpServer = http.createServer(app)
 
