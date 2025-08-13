@@ -6,7 +6,7 @@ const mainRouter = express.Router();
 mainRouter.use(userRouter);
 mainRouter.use(jobRouter);
 
-mainRouter.get('/',(req, res)=>(
+mainRouter.get('/api',(req, res)=>(
     res.send("Welcome to HiringStores!"))
 );
 

@@ -28,6 +28,8 @@ export async function login(req, res) {
 export async function SignUp(req, res) {
   const { username, email, password } = req.body;
   try {
+    console.log("Received body:", req.body);
+    console.log("Password:", password);
     const user = await User.findOne({ $or: [{ username }, { email }] });
     if (user) {
       return res
@@ -115,7 +117,6 @@ export const UpdateProfile = async(req, res)=>{
     res.status(500).json({ success: false, message: "Profile update failed" });
   }
 };
-
 
 export const UserProfile = async(req, res)=>{
   const userId = req.user.id
