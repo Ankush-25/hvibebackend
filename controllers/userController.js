@@ -86,7 +86,8 @@ export const UpdateProfile = async(req, res)=>{
       location,
       resume,
       profile,
-      Role
+      Role,
+      PhoneNumber
     } = req.body;
 
     const updatedFields = {
@@ -96,6 +97,7 @@ export const UpdateProfile = async(req, res)=>{
       ...(location && { location }),
       ...(resume && { resume }),
       ...(Role&&{Role}),
+      ...(PhoneNumber&&{PhoneNumber}),
       ...(profile && {
         profile: {
           ...(profile.skills && { skills: profile.skills }),

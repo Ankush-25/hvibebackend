@@ -10,9 +10,11 @@ const ProfileSchema = new mongoose.Schema({
   FullName: {
     type: String,
   },
+  PhoneNumber:{
+    type:String,
+  },
   ProfileImage: {
     type: String,
-    default: "https://www.w3schools.com/howto/img_avatar.png",
   },
   email: {
     type: String,

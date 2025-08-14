@@ -31,9 +31,9 @@ async function startServer() {
     
   // change this while setuping the production
   app.use(cors({
-    origin: process.env.NDE_ENV === 'production' 
-      ? 'https://www.vgcut.in'||'https://vgcut.in' 
-      : '*',
+    origin:( process.env.NDE_ENV === 'production' 
+      ? ['https://www.vgcut.in','https://vgcut.in'] 
+      : '*'),
     methods: ['GET','POST','PUT','DELETE','PATCH']
   }));
     
