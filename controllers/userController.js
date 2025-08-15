@@ -110,8 +110,8 @@ export const UpdateProfile = async(req, res)=>{
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updatedFields },
-      { new: true }
-    );
+      { new: true, runValidators:true}
+    ).select("-password");
 
     res.status(200).json({ success: true, updatedUser });
   } catch (error) {
