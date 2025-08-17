@@ -18,7 +18,7 @@ export async function login(req, res) {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECERT_KEY, {
       expiresIn: "80hr",
     });
-    res.json({message: "Login Successfully ", 'token': token, userId: user._id });
+    res.json({ message: "Login Successfully ", 'token': token, userId: user._id });
   } catch (error) {
     console.error("Unable to Login Due to : ", error);
     res.status(500).json("Internal Server Error!");
@@ -59,9 +59,9 @@ export async function SignUp(req, res) {
   }
 }
 
-export const deleteUser = async (req, res)=>{
+export const deleteUser = async (req, res) => {
   const userId = req.params.ID
-  
+
   try {
     const user = await User.findByIdAndDelete(userId);
     if (!user) {
@@ -71,11 +71,11 @@ export const deleteUser = async (req, res)=>{
   } catch (error) {
     console.error("Error while deleting the user", error);
     res.status(500).json("Internal Server Error")
-    
+
   }
 }
 
-export const UpdateProfile = async(req, res)=>{
+export const UpdateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -96,8 +96,8 @@ export const UpdateProfile = async(req, res)=>{
       ...(bio && { bio }),
       ...(location && { location }),
       ...(resume && { resume }),
-      ...(Role&&{Role}),
-      ...(PhoneNumber&&{PhoneNumber}),
+      ...(Role && { Role }),
+      ...(PhoneNumber && { PhoneNumber }),
       ...(profile && {
         profile: {
           ...(profile.skills && { skills: profile.skills }),
@@ -110,7 +110,7 @@ export const UpdateProfile = async(req, res)=>{
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updatedFields },
-      { new: true, runValidators:true}
+      { new: true, runValidators: true }
     ).select("-password");
 
     res.status(200).json({ success: true, updatedUser });
@@ -120,16 +120,33 @@ export const UpdateProfile = async(req, res)=>{
   }
 };
 
-export const UserProfile = async(req, res)=>{
+export const UserProfile = async (req, res) => {
   const userId = req.user.id
   try {
     const user = await User.findById(userId).select("-password");
-    if(!user){
-      return req.status(400).json({message: "User Not Found "})
+    if (!user) {
+      return req.status(400).json({ message: "User Not Found " })
     }
-    return res.status(200).json( {response: user})
+    return res.status(200).json({ response: user })
   } catch (error) {
     console.error("There is Some Error in fetching UserProfile ")
-    res.status(500).json({message:" Internal Server Error! "})
+    res.status(500).json({ message: " Internal Server Error! " })
+  }
+}
+
+export const deleteUserData = async (req, res) => {
+  const { expId, userId } = req.body;
+  try {
+    const deletedExp = await User.findOneAndUpdate(
+    {_id:userId},
+    { $pull: { "profile.experience": { _id: expId }}},
+    { new: true, runValidators: true })
+    if (!deletedExp) {
+      return res.status(400).json({ message: "Experience Not Found" })
+    }
+    return res.status(200).json({ message: "Experience Deleted Successfully" })
+  } catch (error) {
+    console.error("Error while deleting the user", error);
+    res.status(500).json("Internal Server Error")
   }
 }
