@@ -48,7 +48,10 @@ const ProfileSchema = new mongoose.Schema({
       {
         degree: String,
         institution: String,
-        year: String,
+        fieldOfStudy:String, 
+        startDate: String,
+        endDate: String,
+        description: String,
       },
     ],
   },
