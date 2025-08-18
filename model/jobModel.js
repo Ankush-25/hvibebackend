@@ -10,7 +10,8 @@ const jobSchema = new mongoose.Schema({
         required: true
     },
     company: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company',
         required: true
     },
     location: {
@@ -28,15 +29,14 @@ const jobSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['IT', 'Marketing', 'Design', 'Finance', 'Healthcare', 'Education', 'Other'],
+        enum:['IT', 'Marketing', 'Design', 'Finance', 'Healthcare', 'Education', 'Other'],
         required: true
     },
     skillsRequired: [{
         type: String
     }],
     experienceLevel: {
-        type: String,
-        enum: ['Entry', 'Mid', 'Senior', 'Executive'],
+        type: Number,
         required: true
     },
     postedBy: {
@@ -56,7 +56,7 @@ const jobSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    Vacancies:{
+    Vacancies: {
         type: Number,
     },
     deadline: {
