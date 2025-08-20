@@ -4,15 +4,15 @@ import { EJSON } from 'bson';
 
 
 export const searchJobs = async (req, res) => {  
-  const { query, experience, location , limitNum=10 ,pageNum=1} = req.query;
+  const { query, experience, location, category, limitNum=10 ,pageNum=1} = req.query;
   try {
-    if (!query && !experience && !location) {
+    if (!query && !experience && !location&&!category) {
       return res.status(400).json("Missing required parameters");
     }
     let querySearch = {}
     const companies = await Company.find({name: { $regex: query, $options: 'i' }}).select("_id");
     const companyId = companies.map(c => c._id)
-    if(query){
+    if(query&&typeof(query)===String){
       querySearch.$or = [
         {title: { $regex: query, $options: 'i' }},
         {skillsRequired: { $regex: query, $options: 'i' }},
@@ -21,7 +21,10 @@ export const searchJobs = async (req, res) => {
       ]
     }
     if(experience){
-      querySearch.experienceLevel = { $lte: experience }
+      querySearch.experienceLevel = { $lte: Number(experience) }
+    }
+    if(category){
+      querySearch.category={$regex: category, $options:"i"}
     }
     if(location){
       querySearch.location = { $regex: location, $options: 'i' }
@@ -44,6 +47,14 @@ export const searchJobs = async (req, res) => {
   } catch (error) {
     console.error("Unable to fetch search results due to :", error);
     res.status(500).json("Internal Server Error!");
+  }
+}
+
+export const CategorySearch =async(req, res)=>{
+  try {
+    
+  } catch (error) {
+    
   }
 }
 

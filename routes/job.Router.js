@@ -7,8 +7,8 @@ const jobController = require('../controllers/jobsController.js');
 jobRouter.post('/postJob/:ID', jobController.PostJob);
 jobRouter.get('/FeatureJobs/:NO', jobController.FeaturedJob);
 // jobRouter.get('/searchJobs', jobController.searchJobs);
-jobRouter.post('/postJob/', jobController.TPostJob);
-jobRouter.get('/searchJobs', jobController.searchJobs)
+jobRouter.post('/postJob', jobController.TPostJob);
+jobRouter.get('/searchJobs', jobController.searchJobs);
 
 //authenticated Routes
 // jobRouter.get('/getJobs', jobController.getJobs);
