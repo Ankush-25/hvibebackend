@@ -2,17 +2,14 @@ import Job from "../model/jobModel.js";
 import Company from "../model/companyModel.js";
 import { EJSON } from 'bson';
 
-
+///improve this api endpoind again 
 export const searchJobs = async (req, res) => {  
   const { query, experience, location, category, limitNum=10 ,pageNum=1} = req.query;
   try {
-    if (!query && !experience && !location&&!category) {
-      return res.status(400).json("Missing required parameters");
-    }
     let querySearch = {}
     const companies = await Company.find({name: { $regex: query, $options: 'i' }}).select("_id");
     const companyId = companies.map(c => c._id)
-    if(query&&typeof(query)===String){
+    if(query&&typeof(query)==="string"){
       querySearch.$or = [
         {title: { $regex: query, $options: 'i' }},
         {skillsRequired: { $regex: query, $options: 'i' }},
@@ -28,6 +25,9 @@ export const searchJobs = async (req, res) => {
     }
     if(location){
       querySearch.location = { $regex: location, $options: 'i' }
+    }
+    if (!query && !experience && !location&&!category) {
+      return res.status(400).json("Missing required parameters");
     }
     const total = await Job.countDocuments(querySearch);
     const jobsSearched = await Job.find(querySearch).sort({ createdAt: -1 }).skip((pageNum - 1) * limitNum).limit(limitNum);
@@ -50,13 +50,7 @@ export const searchJobs = async (req, res) => {
   }
 }
 
-export const CategorySearch =async(req, res)=>{
-  try {
-    
-  } catch (error) {
-    
-  }
-}
+
 
 
 
