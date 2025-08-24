@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export async function login(req, res) {
-  const { email, password } = req.body;
+  const { email, password, userType } = req.body;
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -18,7 +18,7 @@ export async function login(req, res) {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECERT_KEY, {
       expiresIn: "80hr",
     });
-    res.json({ message: "Login Successfully ", 'token': token, userId: user._id });
+    res.json({ message: "Login Successfully ", 'token': token, userId: user._id, "userType": user.userType });
   } catch (error) {
     console.error("Unable to Login Due to : ", error);
     res.status(500).json("Internal Server Error!");
@@ -26,10 +26,8 @@ export async function login(req, res) {
 }
 
 export async function SignUp(req, res) {
-  const { username, email, password } = req.body;
+  const { username, email, password, userType } = req.body;
   try {
-    console.log("Received body:", req.body);
-    console.log("Password:", password);
     const user = await User.findOne({ $or: [{ username }, { email }] });
     if (user) {
       return res
@@ -41,6 +39,7 @@ export async function SignUp(req, res) {
       username,
       email,
       password: EncryptPassword,
+      userType:userType
     });
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECERT_KEY, {
       expiresIn: "80hr",
@@ -52,6 +51,7 @@ export async function SignUp(req, res) {
         message: "SignUp Successfully",
         token: token,
         userId: newUser._id,
+        "userType": userType
       });
   } catch (error) {
     console.error("Unable to SignUp Due to : ", error);

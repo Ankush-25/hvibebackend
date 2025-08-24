@@ -49,14 +49,6 @@ export const searchJobs = async (req, res) => {
     res.status(500).json("Internal Server Error!");
   }
 }
-
-
-
-
-
-
-
-
 export const PostJob = async (req, res) => {
   const user = req.user.ID;
 };
