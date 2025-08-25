@@ -49,18 +49,16 @@ export const searchJobs = async (req, res) => {
     res.status(500).json("Internal Server Error!");
   }
 }
-export const PostJob = async (req, res) => {
-  const user = req.user.ID;
-};
 
-export const TPostJob = async (req, res) => {
+
+export const PostJob = async (req, res) => {
   try {
     // Parse the request body using EJSON if it's in MongoDB Extended JSON format
     const parsedBody = EJSON.parse(JSON.stringify(req.body));
 
     const newJob = new Job({
       ...parsedBody,
-      createdAt: parsedBody.createdAt || Date.now(),
+      createdAt: Date.now(),
       applications: parsedBody.applications || [],
       isActive: parsedBody.isActive !== undefined ? parsedBody.isActive : true
     });

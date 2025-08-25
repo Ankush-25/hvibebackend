@@ -4,13 +4,15 @@ const jobController = require('../controllers/jobsController.js');
 
 
 //who is posting the job with id 
-jobRouter.post('/postJob/:ID', jobController.PostJob);
+// jobRouter.post('/postJob/:ID', jobController.PostJob);
 jobRouter.get('/FeatureJobs/:NO', jobController.FeaturedJob);
 // jobRouter.get('/searchJobs', jobController.searchJobs);
-jobRouter.post('/postJob', jobController.TPostJob);
 jobRouter.get('/searchJobs', jobController.searchJobs);
 
+
 //authenticated Routes
+jobRouter.post('/postJob', jobController.PostJob);
+
 // jobRouter.get('/getJobs', jobController.getJobs);
 // jobRouter.get('/getJob/:id', jobController.getJobById);
 // jobRouter.delete('/deleteJob/:id', jobController.deleteJob);
