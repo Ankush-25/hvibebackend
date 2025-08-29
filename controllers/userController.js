@@ -8,6 +8,7 @@ export async function login(req, res) {
   const { email, password, userType } = req.body;
   try {
     const user = await User.findOne({ email });
+    
     if (!user) {
       return res.status(400).json("User Not Found");
     }

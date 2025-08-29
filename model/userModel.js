@@ -28,6 +28,7 @@ const ProfileSchema = new mongoose.Schema({
   userType: {
     type: String,
     enum: ["job_seeker", "employer", "admin"],
+    required: true
   },
   Role:{
     type:String,
@@ -73,6 +74,14 @@ const ProfileSchema = new mongoose.Schema({
       ref: "Job",
     },
   ],
+  Recruiter:{
+    companies:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+      },
+    ],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
