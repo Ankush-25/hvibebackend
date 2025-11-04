@@ -2,10 +2,11 @@ const express = require('express');
 const jobRouter = express.Router();
 const jobController = require('../controllers/jobsController.js');
 
-
+//Public Routes
 //who is posting the job with id 
 // jobRouter.post('/postJob/:ID', jobController.PostJob);
 jobRouter.get('/FeatureJobs/:NO', jobController.FeaturedJob);
+jobRouter.get('/job/:jobId', jobController.GetJobDetails)
 // jobRouter.get('/searchJobs', jobController.searchJobs);
 jobRouter.get('/searchJobs', jobController.searchJobs);
 

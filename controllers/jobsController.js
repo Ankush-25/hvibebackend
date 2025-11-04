@@ -1,55 +1,65 @@
 import Job from "../model/jobModel.js";
 import Company from "../model/companyModel.js";
-import { EJSON } from 'bson';
+import { EJSON } from "bson";
 
-///improve this api endpoind again 
-export const searchJobs = async (req, res) => {  
-  const { query, experience, location, category, limitNum=10 ,pageNum=1} = req.query;
+///improve this api endpoind again
+// Searching Job
+export const searchJobs = async (req, res) => {
+  const {
+    query,
+    experience,
+    location,
+    category,
+    limitNum = 10,
+    pageNum = 1,
+  } = req.query;
   try {
-    let querySearch = {}
-    const companies = await Company.find({name: { $regex: query, $options: 'i' }}).select("_id");
-    const companyId = companies.map(c => c._id)
-    if(query&&typeof(query)==="string"){
+    let querySearch = {};
+    const companies = await Company.find({
+      name: { $regex: query, $options: "i" },
+    }).select("_id");
+    const companyId = companies.map((c) => c._id);
+    if (query && typeof query === "string") {
       querySearch.$or = [
-        {title: { $regex: query, $options: 'i' }},
-        {skillsRequired: { $regex: query, $options: 'i' }},
-        {description:{$regex:query, $options: "i"}},
-        {company: { $in: companyId }}
-      ]
+        { title: { $regex: query, $options: "i" } },
+        { skillsRequired: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+        { company: { $in: companyId } },
+      ];
     }
-    if(experience){
-      querySearch.experienceLevel = { $lte: Number(experience) }
+    if (experience) {
+      querySearch.experienceLevel = { $lte: Number(experience) };
     }
-    if(category){
-      querySearch.category={$regex: category, $options:"i"}
+    if (category) {
+      querySearch.category = { $regex: category, $options: "i" };
     }
-    if(location){
-      querySearch.location = { $regex: location, $options: 'i' }
+    if (location) {
+      querySearch.location = { $regex: location, $options: "i" };
     }
-    if (!query && !experience && !location&&!category) {
+    if (!query && !experience && !location && !category) {
       return res.status(400).json("Missing required parameters");
     }
     const total = await Job.countDocuments(querySearch);
-    const jobsSearched = await Job.find(querySearch).sort({ createdAt: -1 }).skip((pageNum - 1) * limitNum).limit(limitNum);
+    const jobsSearched = await Job.find(querySearch)
+      .sort({ createdAt: -1 })
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum);
     if (!jobsSearched || jobsSearched.length === 0) {
       return res.status(404).json("No Jobs Found");
     }
-    res
-      .status(200)
-      .json({
-          success: true,
-          total,
-          page: pageNum,
-          totalPages: Math.ceil(total / limitNum),
-          results: jobsSearched.length,
-          jobsSearched,
-        });
+    res.status(200).json({
+      success: true,
+      total,
+      page: pageNum,
+      totalPages: Math.ceil(total / limitNum),
+      results: jobsSearched.length,
+      jobsSearched,
+    });
   } catch (error) {
     console.error("Unable to fetch search results due to :", error);
     res.status(500).json("Internal Server Error!");
   }
-}
-
+};
 
 export const PostJob = async (req, res) => {
   try {
@@ -60,7 +70,7 @@ export const PostJob = async (req, res) => {
       ...parsedBody,
       createdAt: Date.now(),
       applications: parsedBody.applications || [],
-      isActive: parsedBody.isActive !== undefined ? parsedBody.isActive : true
+      isActive: parsedBody.isActive !== undefined ? parsedBody.isActive : true,
     });
 
     const savedJob = await newJob.save();
@@ -69,7 +79,7 @@ export const PostJob = async (req, res) => {
     console.error("Error creating job:", error);
     res.status(500).json({
       error: "Failed to create job",
-      details: error.message
+      details: error.message,
     });
   }
 };
@@ -89,11 +99,31 @@ export const FeaturedJob = async (req, res) => {
     }
     res
       .status(200)
-      .json(
-        { message: "Successfully Fetched the Fetured Jobs", jobsCollection }
-      );
+      .json({
+        message: "Successfully Fetched the Fetured Jobs",
+        jobsCollection,
+      });
   } catch (error) {
-    console.error("Unable to fetch featured JObs due to :", error);
+    console.error("Unable to fetch featured Jobs due to :", error);
     res.status(500).json("Internal Server Error!");
+  }
+};
+
+export const GetJobDetails = async (req, res) => {
+  try {
+    const jobId = req.params.jobId;
+    if (!jobId) {
+      throw new Error("Job Id Not Found");
+    }
+    const jobDetail = await Job.findById(jobId);
+    if (jobDetail.length == 0) {
+      return res.status(404).json("Jobs Details Not found");
+    }
+    res.status(200).json({
+      jobDetail,
+    });
+  } catch (error) {
+    console.error("Unable to find due to: ", error);
+    res.status(500).json("Internal Server Error! ");
   }
 };
