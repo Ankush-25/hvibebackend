@@ -1,4 +1,3 @@
-import axios from "axios";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -11,6 +10,7 @@ export const Scrapper = async (req, res) => {
     const url = req.body.url
     const data = await hiringCafeCardJobDetail(url)
     const JsonFormatJobsData = cleanHtml(data)
+
     exportJobsToExcel(JsonFormatJobsData)
     res.status(200).send({data: JsonFormatJobsData }); // <-- use resp.data
   } catch (error) {
