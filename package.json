@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mendable/firecrawl-js": "^4.4.1",
+    "@openrouter/sdk": "^0.1.1",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "cheerio": "^1.1.2",
@@ -21,9 +21,12 @@
     "mongoose": "^8.16.2",
     "nodemon": "^3.1.10",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/mongoose": "^5.11.96"
+    "@playwright/test": "^1.56.1",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^24.10.0"
   }
 }
