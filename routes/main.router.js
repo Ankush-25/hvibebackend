@@ -13,4 +13,4 @@ mainRouter.get(basepath,(req, res)=>(
     res.send("Welcome to HiringStores!"))
 );
 
-module.exports = mainRouter;
+module.exports = mainRouter;    

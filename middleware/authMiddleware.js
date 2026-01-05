@@ -8,6 +8,7 @@ const authmiddlewareVerification =(req,res,next )=>{
         if  (!authHeader){
            return res.status(400).json("Auth Token is not Provided!");
         }
+        
         const token = authHeader.replace("Bearer ",'').trim();
         const decoded = jwt.verify(token, process.env.JWT_SECERT_KEY);
         req.user = decoded

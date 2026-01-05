@@ -23,7 +23,6 @@ async function startServer() {
   const PORT = process.env.PORT;
   const MONGO_DB_URI = process.env.MONGO_URL;
 
-  app.use(bodyParser.json());
   app.use(express.json());
 
   await dbconnection(MONGO_DB_URI); 

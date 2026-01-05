@@ -10,7 +10,8 @@ export function cleanHtml(html) {
       const $card = $(elem);
 
       const applyUrl = $card.attr("data-actual-apply-url") || "";
-
+      let rawHtml = $card.attr("job-discription-actual")||"";
+      console.log(rawHtml)
       const jobTitle = $card
         .find(
           "span.w-full.font-bold.text-start.line-clamp-3, span.w-full.font-bold.text-start.line-clamp-2"
