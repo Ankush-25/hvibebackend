@@ -85,7 +85,7 @@ export const PostJob = async (req, res) => {
 };
 
 export const FeaturedJob = async (req, res) => {
-  const jobNo = req.params.NO || 5;
+  const jobNo = parseInt(req.params.NO)  || 5;
   if (!jobNo || jobNo <= 0) {
     return res.status(404).json({
       message: "Job number is not specified or found",
@@ -93,7 +93,18 @@ export const FeaturedJob = async (req, res) => {
   }
   //change some fetching details of featured jobs based on the application
   try {
-    const jobsCollection = await Job.find().limit(jobNo);
+    const jobsCollection = await Job.aggregate([
+      {
+        $lookup: {
+          from: "companies",
+          localField: "company",
+          foreignField: "_id",
+          as: "company"
+        }
+      },
+       { $unwind: "$company" },
+       {$limit:jobNo}
+    ])
     if (!jobsCollection || jobsCollection.length === 0) {
       return res.status(404).json("No Jobs Found");
     }

@@ -1,68 +1,80 @@
-const mongoose = require('mongoose');
-
-const jobSchema = new mongoose.Schema({
+const mongoose = require("mongoose");
+const jobSchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     company: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Company',
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
     },
     location: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     salary: {
-        type: Number,
-        required: false
+      type: Number,
+      required: false,
     },
     jobType: {
-        type: String,
-        enum: ['Full-time', 'Part-time', 'Contract', 'Freelance', 'Internship'],
-        required: true
+      type: String,
+      enum: ["Full-time", "Part-time", "Contract", "Freelance", "Internship"],
+      required: true,
     },
     category: {
-        type: String,
-        enum:['IT', 'Marketing', 'Design', 'Finance', 'Healthcare', 'Education', 'Other'],
-        required: true
+      type: String,
+      enum: [
+        "IT",
+        "Marketing",
+        "Design",
+        "Finance",
+        "Healthcare",
+        "Education",
+        "Other",
+      ],
+      required: true,
     },
-    skillsRequired: [{
-        type: String
-    }],
+    skillsRequired: [
+      {
+        type: String,
+      },
+    ],
     experienceLevel: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     postedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    applications: [{
+    applications: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Application'
-    }],
+        ref: "Application",
+      },
+    ],
     isActive: {
-        type: Boolean,
-        default: true
+      type: Boolean,
+      default: true,
     },
     Vacancies: {
-        type: Number,
+      type: Number,
     },
     deadline: {
-        type: Date,
-        required: false
-    }
-});
-const Job = mongoose.model('Job', jobSchema);
+      type: Date,
+      required: false,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+const Job = mongoose.model("Job", jobSchema);
 module.exports = Job;

@@ -1,35 +1,42 @@
 const mongoose = require("mongoose");
 
-const companySchema = new mongoose.Schema({
+const companySchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
-    logo:{
-        type:String,
+    logo: {
+      type: String,
     },
     description: {
-        type: String,
+      type: String,
     },
     location: {
-        type: String,
+      type: String,
     },
     category: {
-        type: String,
-        enum:['IT', 'Marketing', 'Design', 'Finance', 'Healthcare', 'Education', 'Other'],
+      type: String,
+      enum: [
+        "IT",
+        "Marketing",
+        "Design",
+        "Finance",
+        "Healthcare",
+        "Education",
+        "Other",
+      ],
     },
     website: {
-        type: String,
+      type: String,
     },
-    userId: { //who has been working on this company
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-})
-const Company = mongoose.model('Company', companySchema)
-module.exports = Company
+  },
+  { timestamps: true },
+);
+const Company = mongoose.model("Company", companySchema);
+module.exports = Company;
