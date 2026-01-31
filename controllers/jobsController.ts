@@ -1,10 +1,11 @@
+import { Request, Response } from "express";
 import Job from "../model/jobModel.js";
 import Company from "../model/companyModel.js";
 import { EJSON } from "bson";
 
 ///improve this api endpoind again
 // Searching Job
-export const searchJobs = async (req, res) => {
+export const searchJobs = async (req: Request, res: Response) => {
   const {
     query,
     experience,
@@ -14,7 +15,7 @@ export const searchJobs = async (req, res) => {
     pageNum = 1,
   } = req.query;
   try {
-    let querySearch = {};
+    let querySearch: any = {};
     const companies = await Company.find({
       name: { $regex: query, $options: "i" },
     }).select("_id");
@@ -42,8 +43,8 @@ export const searchJobs = async (req, res) => {
     const total = await Job.countDocuments(querySearch);
     const jobsSearched = await Job.find(querySearch)
       .sort({ createdAt: -1 })
-      .skip((pageNum - 1) * limitNum)
-      .limit(limitNum);
+      .skip((Number(pageNum) - 1) * Number(limitNum))
+      .limit(Number(limitNum));
     if (!jobsSearched || jobsSearched.length === 0) {
       return res.status(404).json("No Jobs Found");
     }
@@ -51,7 +52,7 @@ export const searchJobs = async (req, res) => {
       success: true,
       total,
       page: pageNum,
-      totalPages: Math.ceil(total / limitNum),
+      totalPages: Math.ceil(total / Number(limitNum)),
       results: jobsSearched.length,
       jobsSearched,
     });
@@ -61,7 +62,7 @@ export const searchJobs = async (req, res) => {
   }
 };
 
-export const PostJob = async (req, res) => {
+export const PostJob = async (req: Request, res: Response) => {
   try {
     // Parse the request body using EJSON if it's in MongoDB Extended JSON format
     const parsedBody = EJSON.parse(JSON.stringify(req.body));
@@ -75,7 +76,7 @@ export const PostJob = async (req, res) => {
 
     const savedJob = await newJob.save();
     res.status(201).json(savedJob);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating job:", error);
     res.status(500).json({
       error: "Failed to create job",
@@ -84,8 +85,8 @@ export const PostJob = async (req, res) => {
   }
 };
 
-export const FeaturedJob = async (req, res) => {
-  const jobNo = parseInt(req.params.NO)  || 5;
+export const FeaturedJob = async (req: Request, res: Response) => {
+  const jobNo = parseInt(req.params.NO as string) || 5;
   if (!jobNo || jobNo <= 0) {
     return res.status(404).json({
       message: "Job number is not specified or found",
@@ -99,35 +100,33 @@ export const FeaturedJob = async (req, res) => {
           from: "companies",
           localField: "company",
           foreignField: "_id",
-          as: "company"
-        }
+          as: "company",
+        },
       },
-       { $unwind: "$company" },
-       {$limit:jobNo}
-    ])
+      { $unwind: "$company" },
+      { $limit: jobNo },
+    ]);
     if (!jobsCollection || jobsCollection.length === 0) {
       return res.status(404).json("No Jobs Found");
     }
-    res
-      .status(200)
-      .json({
-        message: "Successfully Fetched the Fetured Jobs",
-        jobsCollection,
-      });
+    res.status(200).json({
+      message: "Successfully Fetched the Fetured Jobs",
+      jobsCollection,
+    });
   } catch (error) {
     console.error("Unable to fetch featured Jobs due to :", error);
     res.status(500).json("Internal Server Error!");
   }
 };
 
-export const GetJobDetails = async (req, res) => {
+export const GetJobDetails = async (req: Request, res: Response) => {
   try {
     const jobId = req.params.jobId;
     if (!jobId) {
       throw new Error("Job Id Not Found");
     }
     const jobDetail = await Job.findById(jobId);
-    if (jobDetail.length == 0) {
+    if (!jobDetail) {
       return res.status(404).json("Jobs Details Not found");
     }
     res.status(200).json({

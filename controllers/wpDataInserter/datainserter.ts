@@ -13,26 +13,26 @@ const WP_JOB_URL = `${WP_BASE_URL}/wp-json/wp/v2/job-listings`;
 const axiosInstance = axios.create({
   httpsAgent: new https.Agent({ rejectUnauthorized: false }), // ignore SSL issues for localhost
   auth: { username: WP_USER, password: WP_PASS },
-  headers: { "Content-Type": "application/json" }
+  headers: { "Content-Type": "application/json" },
 });
 
 /**
  * 🔍 Checks if a job with the same title already exists
- * @param {string} jobTitle
+ * @param {string} applyUrl
  * @returns {Promise<boolean>}
  */
-async function isDuplicateJob(applyUrl) {
+async function isDuplicateJob(applyUrl: string) {
   try {
     // We’ll fetch jobs and manually check their meta for matching _application
     const res = await axiosInstance.get(`${WP_JOB_URL}?per_page=50`);
     const existingJobs = res.data;
 
-    const duplicate = existingJobs.some(job =>
-      job.meta && job.meta._application === applyUrl
+    const duplicate = existingJobs.some(
+      (job: any) => job.meta && job.meta._application === applyUrl,
     );
 
     return duplicate;
-  } catch (err) {
+  } catch (err: any) {
     console.error("❌ Error checking duplicates:", err.message);
     return false;
   }
@@ -41,7 +41,7 @@ async function isDuplicateJob(applyUrl) {
 /**
  * 🖼 Uploads the company logo to WordPress Media Library
  */
-async function uploadLogo(logoUrl, companyName) {
+async function uploadLogo(logoUrl: string, companyName: string) {
   if (!logoUrl) return null;
 
   try {
@@ -51,14 +51,14 @@ async function uploadLogo(logoUrl, companyName) {
     const uploadRes = await axios.post(WP_MEDIA_URL, imgRes.data, {
       headers: {
         "Content-Disposition": `attachment; filename="${fileName}"`,
-        "Content-Type": "image/jpeg"
+        "Content-Type": "image/jpeg",
       },
-      auth: { username: WP_USER, password: WP_PASS }
+      auth: { username: WP_USER, password: WP_PASS },
     });
 
     console.log(`🖼️ Logo uploaded for: ${companyName}`);
     return uploadRes.data.id;
-  } catch (err) {
+  } catch (err: any) {
     console.error(`❌ Logo upload failed for "${companyName}":`, err.message);
     return null;
   }
@@ -69,7 +69,7 @@ async function uploadLogo(logoUrl, companyName) {
  * @param {Object} job - Job data object
  * @returns {Promise<Object>} - WordPress API response or skip message
  */
-export async function addJobToWordPress(job) {
+export async function addJobToWordPress(job: any) {
   try {
     // 🔎 Step 1: Check for duplicate title
     const duplicate = await isDuplicateJob(job.applyUrl);
@@ -96,7 +96,7 @@ export async function addJobToWordPress(job) {
         _job_mode: job.mode,
         _job_experience: job.yoe,
         _job_skills: job.skills?.join(", ") || "",
-      }
+      },
     };
 
     // 🚀 Step 4: Create job via WordPress REST API
@@ -104,8 +104,11 @@ export async function addJobToWordPress(job) {
     console.log(`✅ Job successfully added: ${res.data.title.rendered}`);
 
     return res.data;
-  } catch (err) {
-    console.error(`❌ Error adding job "${job.jobTitle}":`, err.response?.data || err.message);
+  } catch (err: any) {
+    console.error(
+      `❌ Error adding job "${job.jobTitle}":`,
+      err.response?.data || err.message,
+    );
     throw err;
   }
 }

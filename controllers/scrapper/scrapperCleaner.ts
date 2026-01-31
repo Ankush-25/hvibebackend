@@ -1,20 +1,20 @@
 import * as cheerio from "cheerio";
 
-export function cleanHtml(html) {
+export function cleanHtml(html: string) {
   try {
     const $ = cheerio.load(html);
-    const jobs = [];
+    const jobs: any[] = [];
 
     // ✅ Loop through each job card
     $("[data-actual-apply-url]").each((i, elem) => {
       const $card = $(elem);
 
       const applyUrl = $card.attr("data-actual-apply-url") || "";
-      let rawHtml = $card.attr("job-discription-actual")||"";
-      console.log(rawHtml)
+      let rawHtml = $card.attr("job-discription-actual") || "";
+      console.log(rawHtml);
       const jobTitle = $card
         .find(
-          "span.w-full.font-bold.text-start.line-clamp-3, span.w-full.font-bold.text-start.line-clamp-2"
+          "span.w-full.font-bold.text-start.line-clamp-3, span.w-full.font-bold.text-start.line-clamp-2",
         )
         .first()
         .text()
@@ -26,7 +26,7 @@ export function cleanHtml(html) {
         .text()
         .trim();
 
-      const badges = [];
+      const badges: string[] = [];
       $card.find("span.border.rounded.text-xs").each((i, el) => {
         badges.push($(el).text().trim());
       });
@@ -58,18 +58,9 @@ export function cleanHtml(html) {
         .trim();
 
       // Remove company name part from description
-      CompShortDescription = CompShortDescription
-        .replace(companyName, "")
+      CompShortDescription = CompShortDescription.replace(companyName, "")
         .replace(":", "")
         .trim();
-
-      // ✅ Correct company name selector
-      // const companyName = $card
-      //   .find("div.flex.mb-4.mt-2 span.font-bold")
-      //   .first()
-      //   .text()
-      //   .replace(":", "")
-      //   .trim();
 
       const companyLogo = $card.find("img").attr("src") || "";
 
@@ -108,7 +99,7 @@ export function cleanHtml(html) {
     });
 
     return jobs;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error parsing HTML:", error.message);
     return [];
   }
