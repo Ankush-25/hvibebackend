@@ -2,6 +2,7 @@
   "name": "hiringstorebackend",
   "version": "1.0.0",
   "description": "Backend of Hiringstore",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
@@ -13,7 +14,7 @@
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
-    "cheerio": "^1.1.2",
+    "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",

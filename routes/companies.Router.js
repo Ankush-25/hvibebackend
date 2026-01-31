@@ -1,8 +1,10 @@
-const express = require('express');
+import express from 'express';
+import * as companyController from '../controllers/companiesController.js';
+import authmiddlewareVerification from '../middleware/authMiddleware.js';
+
 const companyRouter = express.Router();
-const companyController = require('../controllers/companiesController.js');
-const authmiddlewareVerification = require('../middleware/authMiddleware');
 
 companyRouter.post('/addCompany', authmiddlewareVerification, companyController.addCompany);
 companyRouter.get('/allCompanies', authmiddlewareVerification, companyController.getAllCompany);
-module.exports = companyRouter;
+
+export default companyRouter;

@@ -1,20 +1,20 @@
-const express = require("express");
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import http from "http";
+import mainRouter from "./routes/main.router.js";
+
 const app = express();
-const mongoose = require("mongoose");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const http = require('http');
-const bodyParser = require("body-parser");
-const mainRouter = require("./routes/main.router");
 dotenv.config();
 
 
-async function dbconnection(MONGO_DB_URI){
+async function dbconnection(MONGO_DB_URI) {
   try {
     await mongoose.connect(MONGO_DB_URI);
     console.log("The Mongo Database is connected ")
   } catch (error) {
-    console.log("The Mongo database is not connected successfully",error)
+    console.log("The Mongo database is not connected successfully", error)
   }
 }
 
@@ -25,23 +25,23 @@ async function startServer() {
 
   app.use(express.json());
 
-  await dbconnection(MONGO_DB_URI); 
+  await dbconnection(MONGO_DB_URI);
   console.log("Server Has Started!");
-    
+
   // change this while setuping the production
   app.use(cors({
-    origin:( process.env.NDE_ENV === 'production' 
-      ? "*" 
+    origin: (process.env.NDE_ENV === 'production'
+      ? "*"
       : '*'),
-    methods: ['GET','POST','PUT','DELETE','PATCH']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
   }));
-    
-  app.use(basepath,mainRouter);
+
+  app.use(basepath, mainRouter);
 
   const httpServer = http.createServer(app)
 
   httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log("The Application is Started at",PORT);
+    console.log("The Application is Started at", PORT);
   });
 }
 startServer();

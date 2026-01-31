@@ -1,9 +1,8 @@
-const express = require("express");
+import express from "express";
+import * as scrapControllers from "../controllers/scrapper/scrapperController.js";
+
 const ScrapRouter = express.Router();
-const scrapControllers = require("../controllers/scrapper/scrapperController");
 
+ScrapRouter.get("/scraped", scrapControllers.Scrapper);
 
-ScrapRouter.get("/scraped", scrapControllers.Scrapper)
-
-
-module.exports=ScrapRouter
+export default ScrapRouter;

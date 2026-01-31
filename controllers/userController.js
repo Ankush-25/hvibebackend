@@ -8,7 +8,7 @@ export async function login(req, res) {
   const { email, password, userType } = req.body;
   try {
     const user = await User.findOne({ email });
-    
+
     if (!user) {
       return res.status(400).json("User Not Found");
     }
@@ -40,7 +40,7 @@ export async function SignUp(req, res) {
       username,
       email,
       password: EncryptPassword,
-      userType:userType
+      userType: userType
     });
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECERT_KEY, {
       expiresIn: "80hr",
@@ -139,9 +139,9 @@ export const deleteUserData = async (req, res) => {
   const { expId, userId } = req.body;
   try {
     const deletedExp = await User.findOneAndUpdate(
-    {_id:userId},
-    { $pull: { "profile.experience": { _id: expId }}},
-    { new: true, runValidators: true })
+      { _id: userId },
+      { $pull: { "profile.experience": { _id: expId } } },
+      { new: true, runValidators: true })
     if (!deletedExp) {
       return res.status(400).json({ message: "Experience Not Found" })
     }

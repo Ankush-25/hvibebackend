@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import * as jobController from '../controllers/jobsController.js';
+
 const jobRouter = express.Router();
-const jobController = require('../controllers/jobsController.js');
 
 //Public Routes
 //who is posting the job with id 
@@ -18,4 +19,5 @@ jobRouter.post('/postJob', jobController.PostJob);
 // jobRouter.get('/getJob/:id', jobController.getJobById);
 // jobRouter.delete('/deleteJob/:id', jobController.deleteJob);
 // jobRouter.put('/updateJob/:id', jobController.updateJob);
-module.exports = jobRouter;
+
+export default jobRouter;
